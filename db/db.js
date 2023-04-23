@@ -26,7 +26,7 @@ export const addToShoppingList = async (itemName) => {
   if (!isExist) {
     addedOrNot = await collection.shoppingList
       .insert({
-        itemName,
+        itemName: itemName.toLowerCase(),
       })
       .catch((error) => console.log(error, 'error'));
   }
@@ -42,7 +42,9 @@ export const addToShoppingList = async (itemName) => {
 const isExistAlready = async (itemName) => {
   const document = await collection.shoppingList.find().exec();
   //check if data exist
-  const exist = document.find((item) => item._data.itemName == itemName);
+  const exist = document.find(
+    (item) => item._data.itemName === itemName.toLowerCase()
+  );
   //if exist return true else false
   return exist ? true : false;
 };
@@ -58,7 +60,10 @@ export const printShoppingList = () => {
       console.log(`${JSON.stringify(resultSet, null, 4)}`);
     });
 };
-
+/**
+ *
+ * @returns the shopping list in an array
+ */
 export const getShoppingList = async () => {
   const document = await collection.shoppingList.find().exec();
   const shoppingList = document.map((item) => item._data.itemName);
