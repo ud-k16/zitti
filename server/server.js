@@ -1,16 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { addToShoppingList, printShoppingList } from '../db/db.js';
+import {
+  addToShoppingList,
+  getShoppingList,
+  printShoppingList,
+} from '../db/db.js';
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/getShoppingList', async function (req, res) {
-  console.log('request ', req.url);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-control-Allow-Origin', '*');
-  printShoppingList();
-  res.send({ testing: true });
+  const shopingList = await getShoppingList();
+  res.send({ shopingList });
 });
 app.post('/addToShoppingList', async function (req, res) {
   const shoppingData = req.body;

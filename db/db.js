@@ -7,20 +7,24 @@ const db = await createRxDatabase({
   name: 'zitti',
   storage: getRxStorageMemory(),
 });
-//creating a collection
+//creating a collection for shopping list
 const collection = await db.addCollections({
-  zittiCollection: {
+  shoppingList: {
     schema: zittiSchema,
   },
 });
-
+/**
+ * adds item to shopping list if not already present
+ * @param {*} itemName
+ * @returns true if added else false
+ */
 export const addToShoppingList = async (itemName) => {
   const isExist = await isExistAlready(itemName);
   let addedOrNot;
   console.log('already exist : ', isExist);
   //if item not exist add to shoppinglist and return true indicating item added to list
   if (!isExist) {
-    addedOrNot = await collection.zittiCollection
+    addedOrNot = await collection.shoppingList
       .insert({
         itemName,
       })
@@ -30,8 +34,23 @@ export const addToShoppingList = async (itemName) => {
   return addedOrNot ? true : false;
 };
 
+/**
+ * check if item exist in shopingList
+ * @param {*} itemName
+ * @returns true if item exist in shoppinglist or false if does not exist
+ */
+const isExistAlready = async (itemName) => {
+  const document = await collection.shoppingList.find().exec();
+  //check if data exist
+  const exist = document.find((item) => item._data.itemName == itemName);
+  //if exist return true else false
+  return exist ? true : false;
+};
+/**
+ * prints shopping list to console
+ */
 export const printShoppingList = () => {
-  collection.zittiCollection
+  collection.shoppingList
     .find()
     .exec()
     .then((document) => {
@@ -40,11 +59,8 @@ export const printShoppingList = () => {
     });
 };
 
-//check if item exist in shopingList
-const isExistAlready = async (itemName) => {
-  const document = await collection.zittiCollection.find().exec();
-  //check if data exist
-  const exist = document.find((item) => item._data.itemName == itemName);
-  //if exist return true else false
-  return exist ? true : false;
+export const getShoppingList = async () => {
+  const document = await collection.shoppingList.find().exec();
+  const shoppingList = document.map((item) => item._data.itemName);
+  return shoppingList;
 };
