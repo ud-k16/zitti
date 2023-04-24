@@ -1,6 +1,6 @@
 import { createRxDatabase } from 'rxdb';
 import { getRxStorageMemory } from 'rxdb/plugins/storage-memory';
-import { zittiSchema } from './schema.js';
+import { newsPaperSchema, zittiSchema } from './schema.js';
 
 //creation of a database
 const db = await createRxDatabase({
@@ -11,6 +11,12 @@ const db = await createRxDatabase({
 const collection = await db.addCollections({
   shoppingList: {
     schema: zittiSchema,
+  },
+});
+//creating a collection for shopping list
+const newsPaperCollection = await db.addCollections({
+  newspaper: {
+    schema: newsPaperSchema,
   },
 });
 /**
@@ -42,9 +48,7 @@ export const addToShoppingList = async (itemName) => {
 const isExistAlready = async (itemName) => {
   const document = await collection.shoppingList.find().exec();
   //check if data exist
-  const exist = document.find(
-    (item) => item._data.itemName === itemName.toLowerCase()
-  );
+  const exist = document.find((item) => item._data.itemName === itemName);
   //if exist return true else false
   return exist ? true : false;
 };
@@ -68,4 +72,25 @@ export const getShoppingList = async () => {
   const document = await collection.shoppingList.find().exec();
   const shoppingList = document.map((item) => item._data.itemName);
   return shoppingList;
+};
+
+export const fetchPaper = async (date) => {
+  let inserted;
+  // check if already fetched
+  const fetched = await isPaperFetched(date);
+  if (!fetched) {
+    inserted = await newsPaperCollection.newspaper
+      .insert({
+        date,
+      })
+      .catch((error) => console.log(error));
+  }
+  return inserted ? true : false;
+};
+const isPaperFetched = async (date) => {
+  const document = await newsPaperCollection.newspaper.find().exec();
+  //check if data exist
+  const exist = document.find((item) => item._data.date === date);
+  //if exist return true else false
+  return exist ? true : false;
 };
