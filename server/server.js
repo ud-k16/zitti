@@ -5,12 +5,12 @@ import {
   cleanRoom,
   fetchPaper,
   getShoppingList,
-  printShoppingList,
 } from '../db/db.js';
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+//change port number if port unavailable
+const port = 3000;
 app.get('/getShoppingList', async function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-control-Allow-Origin', '*');
@@ -46,4 +46,4 @@ app.get('/cleanRoom', function (req, res) {
   res.send({ response });
 });
 //server listening port
-app.listen(3000);
+app.listen(port, () => console.log(`Server running in port ${port}`));
