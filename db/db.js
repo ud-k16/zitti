@@ -2,6 +2,9 @@ import { createRxDatabase } from 'rxdb';
 import { getRxStorageMemory } from 'rxdb/plugins/storage-memory';
 import { newsPaperSchema, zittiSchema } from './schema.js';
 
+//variable to store room cleaned time
+let cleanedHour;
+let cleanedMinute;
 //creation of a database
 const db = await createRxDatabase({
   name: 'zitti',
@@ -105,4 +108,27 @@ const isPaperFetched = async (date) => {
   const exist = document.find((item) => item._data.date === date);
   //if exist return true else false
   return exist ? true : false;
+};
+
+//executes  room cleaning concept
+export const cleanRoom = () => {
+  const hourOfRequest = new Date().getHours();
+  const minuteOfRequest = new Date().getMinutes();
+  if (cleanedHour || cleanedMinute) {
+    const hourElapsed = cleanedHour - hourOfRequest;
+    const minutesElapsed = cleanedMinute - minuteOfRequest;
+    if (hourElapsed == 0 && minutesElapsed < 10) {
+      return `The room was just cleaned ${minutesElapsed} minute(s) ago. I hope it's not dirty`;
+    } else {
+      //if cleaned time is more than 10 minutes this else block executes
+      cleanedHour = hourOfRequest;
+      cleanedMinute = minuteOfRequest;
+      return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
+    }
+  } else {
+    //else block executes when its the first time requested
+    cleanedHour = hourOfRequest;
+    cleanedMinute = minuteOfRequest;
+    return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
+  }
 };

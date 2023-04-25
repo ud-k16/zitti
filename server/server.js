@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {
   addToShoppingList,
+  cleanRoom,
   fetchPaper,
   getShoppingList,
   printShoppingList,
@@ -37,6 +38,12 @@ app.post('/fetchPaper', async function (req, res) {
       ? 'Here is your newspaper.'
       : `I think you don't get another newspaper the same day`,
   });
+});
+app.get('/cleanRoom', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-control-Allow-Origin', '*');
+  const response = cleanRoom();
+  res.send({ response });
 });
 //server listening port
 app.listen(3000);

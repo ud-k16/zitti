@@ -9,16 +9,16 @@ const processInput = async (input) => {
     const inputInSmallCase = input.toLowerCase();
     //finding out the main word from given input to process further as they have many task related
     //if match found matchFound is an array of result or null otherwise
-    const matchFound = inputInSmallCase.match(/\bshopping\b|\bclean\b/);
+    const matchFound = inputInSmallCase.match(/\bshopping\b/);
     const mainWord = matchFound ? matchFound[0] : inputInSmallCase;
     switch (mainWord) {
       case 'shopping':
-        if (inputInSmallCase.match(/\bread|\bget/)) {
+        if (inputInSmallCase.match(/\bread/)) {
           const { response } = await get('getShoppingList');
           //list of items comes in an array
           response.length > 0
             ? console.log(
-                'Q:',
+                '\nQ:',
                 input,
                 '\nA:',
                 'Here is your shopping list.',
@@ -40,13 +40,16 @@ const processInput = async (input) => {
           console.log('Q:', input, '\nA:', response, '\n');
         }
         break;
-      case 'fetch the newspaper.':
+      case 'fetch the newspaper.': {
         const { response } = await post('fetchPaper', {
           date: new Date().getDate(),
         });
         console.log(`Q:`, input, `\nA: ${response}\n`);
         break;
-      case 'clean':
+      }
+      case 'clean my room.':
+        const { response } = await get('cleanRoom');
+        console.log(`Q: ${input} \nA: ${response}\n`);
         break;
       case "how's the weather outside?":
         console.log(
@@ -101,4 +104,5 @@ const getItemFromSentence = (inputInSmallCase) => {
 
   return object[0];
 };
+
 zitti();

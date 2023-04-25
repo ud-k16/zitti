@@ -11,4 +11,5 @@ export const userInput = [
   'Read my shopping list.',
   'How much is 5 + 2?',
   "How's the weather outside?",
+  'Clean my room.',
 ];
