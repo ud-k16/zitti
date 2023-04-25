@@ -13,7 +13,7 @@ const collection = await db.addCollections({
     schema: zittiSchema,
   },
 });
-//creating a collection for shopping list
+//creating a collection for newspaper fetched
 const newsPaperCollection = await db.addCollections({
   newspaper: {
     schema: newsPaperSchema,
