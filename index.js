@@ -59,12 +59,14 @@ const processInput = async (input) => {
     const mainWord = matchFound ? matchFound[0] : inputInSmallCase;
     switch (mainWord) {
       case 'shopping':
+        //if the shopping question ask to read the list
         if (inputInSmallCase.match(/\bread/)) {
+          //response is an array  of items
           const { response } = await get('getShoppingList');
-          //list of items comes in an array
+          //if array empty. tell user it's empty or list the items
           response.length > 0
             ? console.log(
-                '\nQ:',
+                'Q:',
                 input,
                 '\nA:',
                 'Here is your shopping list.',
@@ -78,8 +80,12 @@ const processInput = async (input) => {
                 'You have no items in your shopping list',
                 '\n'
               );
-        } else if (inputInSmallCase.includes('add')) {
+        }
+        //if shopping question ask to add , this block is executed
+        else if (inputInSmallCase.includes('add')) {
+          //getItemFromSentence() parses the given sentence and returns the item to add
           const itemName = getItemFromSentence(inputInSmallCase);
+          //response is a sentence . indicates if added or already present
           const { response } = await post('addToShoppingList', {
             itemName,
           });
@@ -87,6 +93,7 @@ const processInput = async (input) => {
         }
         break;
       case 'fetch the newspaper.': {
+        //response is a sentence . indicates if paper fetched now  or already fetched for the day
         const { response } = await post('fetchPaper', {
           date: new Date().getDate(),
         });
@@ -94,6 +101,7 @@ const processInput = async (input) => {
         break;
       }
       case 'clean my room.':
+        //response is a sentence that indicates cleaning is accepted or not and cleaned time is returned
         const { response } = await get('cleanRoom');
         console.log(`Q: ${input} \nA: ${response}\n`);
         break;
@@ -106,7 +114,6 @@ const processInput = async (input) => {
         break;
       case 'hey. how are you?':
         console.log(`Q:`, input, `\nA :Hello, I am doing great.\n`);
-
         break;
       default:
         console.log(`Q:`, input, "\nA. Hmm.. I don't know that\n");
