@@ -17,14 +17,14 @@ app.get('/getShoppingList', async function (req, res) {
   res.send({ response: shoppingList });
 });
 app.post('/addToShoppingList', async function (req, res) {
-  const shoppingData = req.body;
-  const addedOrNot = await addToShoppingList(shoppingData.itemName);
+  const { itemName } = req.body;
+  const addedOrNot = await addToShoppingList(itemName);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-control-Allow-Origin', '*');
   res.send({
     response: addedOrNot
-      ? `${shoppingData.itemName} added to your shopping list.`
-      : `You already have ${shoppingData.itemName} in your shopping list`,
+      ? `${itemName} added to your shopping list.`
+      : `You already have ${itemName} in your shopping list`,
   });
 });
 app.post('/fetchPaper', async function (req, res) {

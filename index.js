@@ -27,11 +27,20 @@ const processInput = async (input) => {
         console.log('Hello, I am doing great.');
         break;
       case 'shopping':
-        if (inputInSmallCase.includes('read' || 'get' || 'tell')) {
+        // console.log(inputInSmallCase, '>>>>>> is the question');
+
+        if (inputInSmallCase.match(/\bread|\bget/)) {
+          console.log(inputInSmallCase, '>>>>>> is the question');
           const { response } = await get('getShoppingList');
           response.length > 0
             ? console.log('Here is your shopping list.', response)
             : console.log('You have no items in your shopping list');
+        } else if (inputInSmallCase.includes('add' || 'put' || 'insert')) {
+          const itemName = getItemFromSentence(input);
+          const { response } = await post('addToShoppingList', {
+            itemName,
+          });
+          console.log(response);
         }
         break;
       case 'fetch the newspaper.':
@@ -55,6 +64,12 @@ const processInput = async (input) => {
     }
   }
 };
+/**
+ * performs http post request
+ * @param {*} routeName
+ * @param {*} data
+ * @returns
+ */
 const post = async (routeName, data) => {
   const { data: response } = await axios.post(
     `http://127.0.0.1:3000/${routeName}`,
@@ -62,10 +77,22 @@ const post = async (routeName, data) => {
   );
   return response;
 };
+/**
+ * performs an http get request
+ * @param {*} routeName
+ * @param {*} query
+ * @returns
+ */
 const get = async (routeName, query) => {
   const { data: response } = await axios.get(
     `http://127.0.0.1:3000/${routeName}`
   );
   return response;
+};
+
+const getItemFromSentence = (input) => {
+  const object = input.toLowerCase().match(/^shopping|^to|^my|^list|^add/);
+  console.log(object);
+  return object[0];
 };
 zitti();
