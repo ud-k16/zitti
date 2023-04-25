@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 app.get('/getShoppingList', async function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-control-Allow-Origin', '*');
-  const shopingList = await getShoppingList();
-  res.send({ shopingList });
+  const shoppingList = await getShoppingList();
+  res.send({ response: shoppingList });
 });
 app.post('/addToShoppingList', async function (req, res) {
   const shoppingData = req.body;

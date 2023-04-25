@@ -83,7 +83,9 @@ export const fetchPaper = async (date) => {
       .insert({
         date,
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        console.log(error, 'error occured in the newspaper insert')
+      );
   }
   return inserted ? true : false;
 };
