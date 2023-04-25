@@ -27,7 +27,7 @@ const newsPaperCollection = await db.addCollections({
 export const addToShoppingList = async (itemName) => {
   const isExist = await isExistAlready(itemName);
   let addedOrNot;
-  console.log('already exist : ', isExist);
+  console.log(`${itemName} `, 'already exist : ', isExist);
   //if item not exist add to shoppinglist and return true indicating item added to list
   if (!isExist) {
     addedOrNot = await collection.shoppingList
@@ -73,7 +73,11 @@ export const getShoppingList = async () => {
   const shoppingList = document.map((item) => item._data.itemName);
   return shoppingList;
 };
-
+/**
+ * checks for if the given date for newspaper is present in db or adds the given date to db
+ * @param {*} date
+ * @returns
+ */
 export const fetchPaper = async (date) => {
   let inserted;
   // check if already fetched
@@ -87,8 +91,14 @@ export const fetchPaper = async (date) => {
         console.log(error, 'error occured in the newspaper insert')
       );
   }
+  //if given date added true is returned or else fasle
   return inserted ? true : false;
 };
+/**
+ * checks if given date is present in db returns true if exist or false
+ * @param {*} date
+ * @returns
+ */
 const isPaperFetched = async (date) => {
   const document = await newsPaperCollection.newspaper.find().exec();
   //check if data exist
