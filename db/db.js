@@ -118,9 +118,12 @@ export const cleanRoom = () => {
   if (cleanedHour || cleanedMinute) {
     //calculating elapsed time since last clean
     const hourElapsed = hourOfRequest - cleanedHour;
-    const minutesElapsed = minuteOfRequest - cleanedMinute;
+    const minutesElapsed =
+      hourElapsed == 0
+        ? minuteOfRequest - cleanedMinute
+        : 60 - cleanedMinute + minuteOfRequest;
     // if the elapsed time is less than 10 minutes, cleaning is denied
-    if (hourElapsed == 0 && minutesElapsed < 10) {
+    if (minutesElapsed < 10) {
       return `The room was just cleaned ${minutesElapsed} minute(s) ago. I hope it's not dirty`;
     } else {
       //this else block executes
