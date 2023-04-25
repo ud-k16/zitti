@@ -2,18 +2,7 @@ import axios from 'axios';
 import { userInput } from './input/userinput.js';
 
 const zitti = () => {
-  userInput.forEach(async (input, index) => await processInput(input, index));
-
-  // await axios
-  //   .post('http://127.0.0.1:3000/addToShoppingList', {
-  //     itemName: 'SWeet',
-  //   })
-  //   .then((result) => {
-  //     console.log(result.data, 'post result');
-  //   });
-  // axios.get('http://127.0.0.1:3000/getShoppingList').then((result) => {
-  //   console.log(result.data);
-  // });
+  userInput.forEach((input, index) => processInput(input, index));
 };
 const processInput = async (input) => {
   {
@@ -23,28 +12,39 @@ const processInput = async (input) => {
     const matchFound = inputInSmallCase.match(/\bshopping\b|\bclean\b/);
     const mainWord = matchFound ? matchFound[0] : inputInSmallCase;
     switch (mainWord) {
-      case 'hey. how are you?':
-        console.log('Hello, I am doing great.');
-        break;
       case 'shopping':
         if (inputInSmallCase.match(/\bread|\bget/)) {
           const { response } = await get('getShoppingList');
+          //list of items comes in an array
           response.length > 0
-            ? console.log('Here is your shopping list.', response.join(','))
-            : console.log('You have no items in your shopping list');
+            ? console.log(
+                'Q:',
+                input,
+                '\nA:',
+                'Here is your shopping list.',
+                response.join(','),
+                '\n'
+              )
+            : console.log(
+                'Q:',
+                input,
+                '\n',
+                'You have no items in your shopping list',
+                '\n'
+              );
         } else if (inputInSmallCase.includes('add')) {
           const itemName = getItemFromSentence(inputInSmallCase);
           const { response } = await post('addToShoppingList', {
             itemName,
           });
-          console.log(response);
+          console.log('Q:', input, '\nA:', response, '\n');
         }
         break;
       case 'fetch the newspaper.':
         const { response } = await post('fetchPaper', {
           date: new Date().getDate(),
         });
-        console.log(`Q:`, input, `\nA:${response}`);
+        console.log(`Q:`, input, `\nA: ${response}\n`);
         break;
       case 'clean':
         break;
@@ -52,11 +52,15 @@ const processInput = async (input) => {
         console.log(
           `Q:`,
           input,
-          "\nA.It's pleasant outside. You should take a walk."
+          "\nA. It's pleasant outside. You should take a walk.\n"
         );
         break;
+      case 'hey. how are you?':
+        console.log(`Q:`, input, `\nA :Hello, I am doing great.\n`);
+
+        break;
       default:
-        console.log(`Q:`, input, "\nA.Hmm.. I don't know that");
+        console.log(`Q:`, input, "\nA. Hmm.. I don't know that\n");
         break;
     }
   }
