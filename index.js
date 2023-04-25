@@ -27,16 +27,13 @@ const processInput = async (input) => {
         console.log('Hello, I am doing great.');
         break;
       case 'shopping':
-        // console.log(inputInSmallCase, '>>>>>> is the question');
-
         if (inputInSmallCase.match(/\bread|\bget/)) {
-          console.log(inputInSmallCase, '>>>>>> is the question');
           const { response } = await get('getShoppingList');
           response.length > 0
             ? console.log('Here is your shopping list.', response)
             : console.log('You have no items in your shopping list');
-        } else if (inputInSmallCase.includes('add' || 'put' || 'insert')) {
-          const itemName = getItemFromSentence(input);
+        } else if (inputInSmallCase.includes('add')) {
+          const itemName = getItemFromSentence(inputInSmallCase);
           const { response } = await post('addToShoppingList', {
             itemName,
           });
@@ -90,9 +87,14 @@ const get = async (routeName, query) => {
   return response;
 };
 
-const getItemFromSentence = (input) => {
-  const object = input.toLowerCase().match(/^shopping|^to|^my|^list|^add/);
-  console.log(object);
+const getItemFromSentence = (inputInSmallCase) => {
+  const inputWithoutSpace = inputInSmallCase.replaceAll('.', '');
+
+  const words = inputWithoutSpace.split(' ');
+
+  const referenceSet = new Set(['add', 'to', 'my', 'shopping', 'list']);
+  const object = words.filter((eachWord) => !referenceSet.has(eachWord));
+
   return object[0];
 };
 zitti();
