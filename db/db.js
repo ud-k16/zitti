@@ -123,19 +123,25 @@ export const cleanRoom = () => {
         ? minuteOfRequest - cleanedMinute
         : 60 - cleanedMinute + minuteOfRequest;
     // if the elapsed time is less than 10 minutes, cleaning is denied
-    if (minutesElapsed < 10) {
+    if (minutesElapsed <= 10) {
       return `The room was just cleaned ${minutesElapsed} minute(s) ago. I hope it's not dirty`;
     } else {
       //this else block executes
       //if cleaned time is more than 10 minutes. cleaning is accepted and cleaned time is returned
       cleanedHour = hourOfRequest;
       cleanedMinute = minuteOfRequest;
-      return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
+      return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${
+        cleanedMinute.toString().length != 1
+          ? cleanedMinute
+          : '0' + cleanedMinute
+      }`;
     }
   } else {
     //else block executes when its the first time requested,cleaning is accepted and cleaned time is returned
     cleanedHour = hourOfRequest;
     cleanedMinute = minuteOfRequest;
-    return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
+    return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${
+      cleanedMinute.toString().length != 1 ? cleanedMinute : '0' + cleanedMinute
+    }`;
   }
 };
