@@ -30,7 +30,7 @@ const processInput = async (input) => {
         if (inputInSmallCase.match(/\bread|\bget/)) {
           const { response } = await get('getShoppingList');
           response.length > 0
-            ? console.log('Here is your shopping list.', response)
+            ? console.log('Here is your shopping list.', response.join(','))
             : console.log('You have no items in your shopping list');
         } else if (inputInSmallCase.includes('add')) {
           const itemName = getItemFromSentence(inputInSmallCase);
