@@ -28,7 +28,7 @@ const processInput = async (input) => {
             : console.log(
                 'Q:',
                 input,
-                '\n',
+                '\nA:',
                 'You have no items in your shopping list',
                 '\n'
               );

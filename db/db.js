@@ -115,8 +115,8 @@ export const cleanRoom = () => {
   const hourOfRequest = new Date().getHours();
   const minuteOfRequest = new Date().getMinutes();
   if (cleanedHour || cleanedMinute) {
-    const hourElapsed = cleanedHour - hourOfRequest;
-    const minutesElapsed = cleanedMinute - minuteOfRequest;
+    const hourElapsed = hourOfRequest - cleanedHour;
+    const minutesElapsed = minuteOfRequest - cleanedMinute;
     if (hourElapsed == 0 && minutesElapsed < 10) {
       return `The room was just cleaned ${minutesElapsed} minute(s) ago. I hope it's not dirty`;
     } else {
