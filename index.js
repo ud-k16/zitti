@@ -2,8 +2,54 @@ import axios from 'axios';
 import { userInput } from './input/userinput.js';
 
 const zitti = () => {
+  //userInput is an array of input sentence
   userInput.forEach((input, index) => processInput(input, index));
 };
+
+/**
+ * performs http post request
+ * @param {*} routeName
+ * @param {*} data
+ * @returns
+ */
+const post = async (routeName, data) => {
+  const { data: response } = await axios.post(
+    `http://127.0.0.1:3000/${routeName}`,
+    data
+  );
+  return response;
+};
+/**
+ * performs an http get request without query
+ * @param {*} routeName
+ 
+ * @returns
+ */
+const get = async (routeName) => {
+  const { data: response } = await axios.get(
+    `http://127.0.0.1:3000/${routeName}`
+  );
+  return response;
+};
+/**
+ * parses the sentence and return item to add in shopping list
+ * @param {*} inputInSmallCase
+ * @returns
+ */
+const getItemFromSentence = (inputInSmallCase) => {
+  const inputWithoutSpace = inputInSmallCase.replaceAll('.', '');
+
+  const words = inputWithoutSpace.split(' ');
+
+  const referenceSet = new Set(['add', 'to', 'my', 'shopping', 'list']);
+  const object = words.filter((eachWord) => !referenceSet.has(eachWord));
+
+  return object[0];
+};
+/**
+ * process the given input
+ * @param {*} input
+ */
 const processInput = async (input) => {
   {
     const inputInSmallCase = input.toLowerCase();
@@ -68,41 +114,5 @@ const processInput = async (input) => {
     }
   }
 };
-/**
- * performs http post request
- * @param {*} routeName
- * @param {*} data
- * @returns
- */
-const post = async (routeName, data) => {
-  const { data: response } = await axios.post(
-    `http://127.0.0.1:3000/${routeName}`,
-    data
-  );
-  return response;
-};
-/**
- * performs an http get request
- * @param {*} routeName
- * @param {*} query
- * @returns
- */
-const get = async (routeName, query) => {
-  const { data: response } = await axios.get(
-    `http://127.0.0.1:3000/${routeName}`
-  );
-  return response;
-};
-
-const getItemFromSentence = (inputInSmallCase) => {
-  const inputWithoutSpace = inputInSmallCase.replaceAll('.', '');
-
-  const words = inputWithoutSpace.split(' ');
-
-  const referenceSet = new Set(['add', 'to', 'my', 'shopping', 'list']);
-  const object = words.filter((eachWord) => !referenceSet.has(eachWord));
-
-  return object[0];
-};
-
+//execution of zitti
 zitti();

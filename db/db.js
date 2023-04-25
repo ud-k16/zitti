@@ -30,7 +30,7 @@ const newsPaperCollection = await db.addCollections({
 export const addToShoppingList = async (itemName) => {
   const isExist = await isExistAlready(itemName);
   let addedOrNot;
-  console.log(`${itemName} `, 'already exist : ', isExist);
+  // console.log(`${itemName} `, 'already exist : ', isExist);
   //if item not exist add to shoppinglist and return true indicating item added to list
   if (!isExist) {
     addedOrNot = await collection.shoppingList
@@ -114,19 +114,23 @@ const isPaperFetched = async (date) => {
 export const cleanRoom = () => {
   const hourOfRequest = new Date().getHours();
   const minuteOfRequest = new Date().getMinutes();
+  //if condition :  checking if room is already cleaned
   if (cleanedHour || cleanedMinute) {
+    //calculating elapsed time since last clean
     const hourElapsed = hourOfRequest - cleanedHour;
     const minutesElapsed = minuteOfRequest - cleanedMinute;
+    // if the elapsed time is less than 10 minutes, cleaning is denied
     if (hourElapsed == 0 && minutesElapsed < 10) {
       return `The room was just cleaned ${minutesElapsed} minute(s) ago. I hope it's not dirty`;
     } else {
-      //if cleaned time is more than 10 minutes this else block executes
+      //this else block executes
+      //if cleaned time is more than 10 minutes. cleaning is accepted and cleaned time is returned
       cleanedHour = hourOfRequest;
       cleanedMinute = minuteOfRequest;
       return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
     }
   } else {
-    //else block executes when its the first time requested
+    //else block executes when its the first time requested,cleaning is accepted and cleaned time is returned
     cleanedHour = hourOfRequest;
     cleanedMinute = minuteOfRequest;
     return `Room is cleaned. It looks tidy now. Job completed at ${cleanedHour}:${cleanedMinute}`;
